@@ -1,4 +1,5 @@
 import { RequestError } from '@/protocols';
+import { BAD_REQUEST } from 'http-status';
 
 export function requestError(status: number, statusText: string): RequestError {
   return {

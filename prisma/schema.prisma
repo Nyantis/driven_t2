@@ -17,7 +17,7 @@ model User {
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
   Session    Session[]
-  Enrollment Enrollment[]
+  Enrollment Enrollment?
 }
 
 model Session {
@@ -46,12 +46,12 @@ model Enrollment {
   cpf       String    @db.VarChar(255)
   birthday  DateTime
   phone     String    @db.VarChar(255)
-  userId    Int       @unique
   User      User      @relation(fields: [userId], references: [id])
+  userId    Int       @unique
   Address   Address[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  Ticket    Ticket[]
+  Ticket    Ticket?
 }
 
 model Address {
@@ -63,8 +63,8 @@ model Address {
   number        String     @db.VarChar(255)
   neighborhood  String     @db.VarChar(255)
   addressDetail String?    @db.VarChar(255)
-  enrollmentId  Int        @unique
   Enrollment    Enrollment @relation(fields: [enrollmentId], references: [id])
+  enrollmentId  Int        @unique
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
 }
@@ -82,14 +82,14 @@ model TicketType {
 
 model Ticket {
   id           Int          @id @default(autoincrement())
-  ticketTypeId Int
   TicketType   TicketType   @relation(fields: [ticketTypeId], references: [id])
-  enrollmentId Int
+  ticketTypeId Int
   Enrollment   Enrollment   @relation(fields: [enrollmentId], references: [id])
+  enrollmentId Int @unique
   status       TicketStatus
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
-  Payment      Payment[]
+  Payment      Payment?
 }
 
 enum TicketStatus {
@@ -99,8 +99,8 @@ enum TicketStatus {
 
 model Payment {
   id             Int      @id @default(autoincrement())
-  ticketId       Int
   Ticket         Ticket   @relation(fields: [ticketId], references: [id])
+  ticketId       Int @unique
   value          Int
   cardIssuer     String
   cardLastDigits String
