@@ -15,15 +15,13 @@ export async function getAllTicketsTypes(req: AuthenticatedRequest, res: Respons
 
 export async function getUserTicket(req: AuthenticatedRequest, res: Response) {
     const { userId } = req;
+
   try {
     const ticket = await ticketsService.getTicketByUserId(userId);
-
     return res.status(httpStatus.OK).send(ticket);
+  
   } catch (error) {
-    if(!error.message){
-      return res.sendStatus(httpStatus.BAD_REQUEST);
-    }
-    return res.status(error.code).send(error.message)
+    return res.sendStatus(httpStatus.NOT_FOUND);
   }
 }
 
@@ -41,7 +39,6 @@ export async function postNewTicket(req: AuthenticatedRequest, res: Response) {
     if(!error.message){
       return res.sendStatus(httpStatus.BAD_REQUEST);
     }
-    console.log(error)
     return res.status(error.code).send(error.message)
   }
 }
