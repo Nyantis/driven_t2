@@ -1,3 +1,5 @@
+import { Payment } from "@prisma/client";
+
 export type ApplicationError = {
   code?: number,
   name: string;
@@ -45,3 +47,5 @@ export type RequestError = {
   name: string;
   message: string;
 };
+
+export type PaymentParams = Omit<Payment, 'id' | 'createdAt' | 'updatedAt'>;

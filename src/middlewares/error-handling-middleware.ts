@@ -3,14 +3,37 @@ import httpStatus from 'http-status';
 import { ApplicationError } from '@/protocols';
 
 export function handleApplicationErrors(
-  err: ApplicationError,
+  err: ApplicationError | Error,
   _req: Request,
   res: Response,
   _next: NextFunction,
 ) {
-  
-  if(err.message){
-    return res.status(err.code).send({
+  if (err.name === 'CannotEnrollBeforeStartDateError') {
+    return res.status(httpStatus.BAD_REQUEST).send({
+      message: err.message,
+    });
+  }
+
+  if (err.name === 'ConflictError' || err.name === 'DuplicatedEmailError') {
+    return res.status(httpStatus.CONFLICT).send({
+      message: err.message,
+    });
+  }
+
+  if (err.name === 'InvalidCredentialsError') {
+    return res.status(httpStatus.UNAUTHORIZED).send({
+      message: err.message,
+    });
+  }
+
+  if (err.name === 'UnauthorizedError') {
+    return res.status(httpStatus.UNAUTHORIZED).send({
+      message: err.message,
+    });
+  }
+
+  if (err.name === 'NotFoundError') {
+    return res.status(httpStatus.NOT_FOUND).send({
       message: err.message,
     });
   }
